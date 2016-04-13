@@ -26,7 +26,14 @@
 #include <alsa/asoundlib.h> 
 
 #include <QSettings>
-#include <QtWidgets>
+#include <QMessageBox>
+#include <QFileDialog>
+#include <QStatusBar>
+#include <QDragEnterEvent>
+#include <QDropEvent>
+#include <QMenuBar>
+#include <QToolBar>
+#include <QWhatsThis>
 
 #include "ui_MainWindow.h"
 #include "MidiIn.h"

@@ -4,5 +4,8 @@ Simple Sysexxer is a universal tool to exchange MIDI system exclusive data (aka 
 
 Original URL: http://sourceforge.net/projects/sysexxer/
 
-**Personal copy with minor changes.**
+See also: http://www.christeck.de/wp/products/simple-sysexxer/ which explains
+usage.
+
+**This is an updated version for qt5, forked from Manuel-K'd initial patches.**
 

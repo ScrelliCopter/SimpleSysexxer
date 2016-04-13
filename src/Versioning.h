@@ -19,7 +19,7 @@
 ***************************************************************************/
  
 #define APPNAME "Simple Sysexxer"
-#define VERSION 0.3
-#define AUTHOR "Christoph Eckert <ce add christeck dodd de>"
-#define YEARS "2009"
+#define VERSION 0.5
+#define AUTHOR "ce@christeck.de updated 2016 ewe2@ewe2.ninja"
+#define YEARS "2009-2016"
 #define LICENSE "GNU GPL license V2"
