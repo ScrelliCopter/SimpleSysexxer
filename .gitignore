@@ -7,10 +7,12 @@ qrc_*.cpp
 *.dll
 ui_*
 *.pro.user
+*.qmake*
 
 build
 
 SimpleSysexxer
+bin/simplesysexxer
 *.exe
 
 # Archives
