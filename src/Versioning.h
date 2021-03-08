@@ -17,7 +17,7 @@
 *   Free Software Foundation, Inc.,                                       *
 *   59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.             *
 ***************************************************************************/
- 
+
 #define APPNAME "Simple Sysexxer"
 #define VERSION 0.5
 #define AUTHOR "ce@christeck.de updated 2016 ewe2@ewe2.ninja"

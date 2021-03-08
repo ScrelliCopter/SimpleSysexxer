@@ -26,33 +26,31 @@
 
 int main(int argc, char* argv[])
 {
-  QApplication app(argc, argv);
+	QApplication app(argc, argv);
 
-  QString languageFile;
-  QLocale DefaultLocale;
-  languageFile = DefaultLocale.name();
-  languageFile.append(".qm");
-  languageFile.prepend(":/translations/");
+	QString languageFile;
+	QLocale DefaultLocale;
+	languageFile = DefaultLocale.name();
+	languageFile.append(".qm");
+	languageFile.prepend(":/translations/");
 
-  QTranslator translator(&app);
-  QTranslator qtTranslator;
-  translator.load(languageFile);
-  qtTranslator.load(QString("qt_") + DefaultLocale.name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
-  app.installTranslator(&translator);
-  app.installTranslator(&qtTranslator);
+	QTranslator translator(&app);
+	QTranslator qtTranslator;
+	translator.load(languageFile);
+	qtTranslator.load(QString("qt_") + DefaultLocale.name(), QLibraryInfo::location(QLibraryInfo::TranslationsPath));
+	app.installTranslator(&translator);
+	app.installTranslator(&qtTranslator);
 
-  auto MainForm = new MyMainWindow;
-  MainForm->show();
+	auto MainForm = new MyMainWindow;
+	MainForm->show();
 
-  if (argc > 1)
-    {
-      QString FileName(argv[1]);
-      QFileInfo FileInfo(FileName);
-      if (FileInfo.isReadable())
-        {
-          MainForm->loadFile(FileName);
-        }
-    }
+	if (argc > 1)
+	{
+		QString FileName(argv[1]);
+		QFileInfo FileInfo(FileName);
+		if (FileInfo.isReadable())
+			MainForm->loadFile(FileName);
+	}
 
-  return app.exec();
+	return app.exec();
 }

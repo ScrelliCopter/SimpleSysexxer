@@ -1,4 +1,4 @@
- /*************************************************************************
+/*************************************************************************
 *   Copyright (C) 2009 by Christoph Eckert                                *
 *   ce@christeck.de                                                       *
 *                                                                         *
@@ -22,44 +22,45 @@
 #define MIDIOUT_H
 
 #include <iostream>
-#include <math.h>
+#include <cmath>
 
 #include <QThread>
 #include <QtCore>
 
-#include <alsa/asoundlib.h> 
+#include <alsa/asoundlib.h>
 
-# define CHUNKMAXSIZE 256
+#define CHUNKMAXSIZE 256
 
 class MidiOut : public QThread
-  {
-    // No signal and slot connections without this macro:
-    Q_OBJECT 
-    
-    private:
-      snd_seq_t * sequencerHandle;
-      int portNumber;
-      unsigned int eventCount;
-      unsigned int chunkAmount;
-      unsigned int chunkCount;
-      QList<std::vector<unsigned char>*> eventList;
-      bool sendMidi;
-      void determineChunkAmount();
+{
+	// No signal and slot connections without this macro:
+Q_OBJECT
 
-    public:
-      MidiOut();
-      ~MidiOut();
-      
-    public slots:
-      void init();
-      void run();
-      void send( std::vector<unsigned char>* );
-      void stop();
-      void setEventList( QList<std::vector<unsigned char>*> );
-    
-    signals:
-      void eventSent( int, int );
-      void errorMessage( QString, QString );
-  };
+private:
+	snd_seq_t* sequencerHandle;
+	int portNumber;
+	unsigned int eventCount;
+	unsigned int chunkAmount;
+	unsigned int chunkCount;
+	QList<std::vector<unsigned char>*> eventList;
+	bool sendMidi;
+
+	void determineChunkAmount();
+
+public:
+	MidiOut();
+	~MidiOut() override;
+
+public slots:
+	void init();
+	void run();
+	void send(std::vector<unsigned char>*);
+	void stop();
+	void setEventList(QList<std::vector<unsigned char>*>);
+
+signals:
+	void eventSent(int, int);
+	void errorMessage(QString, QString);
+};
 
 #endif
