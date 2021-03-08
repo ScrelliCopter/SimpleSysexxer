@@ -51,9 +51,10 @@ public:
 	MidiOut();
 	~MidiOut() override;
 
+	void run() override;
+
 public slots:
 	void init();
-	void run();
 	void send(std::vector<unsigned char>*);
 	void stop();
 	void setEventList(QList<std::vector<unsigned char>*>);
