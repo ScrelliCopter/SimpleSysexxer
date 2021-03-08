@@ -330,7 +330,7 @@ void MyMainWindow::displayAboutBox()
     AboutBox = new QMessageBox(this);
     QString AboutText;
     AboutText.append( APPNAME ).append( " " ).append( (uint)VERSION ).append( tr( " is (c) " ) ).append( AUTHOR ).append( " ").append( YEARS ).append( ".\n" );
-    AboutText.append( tr("It uses the Famous QT4 toolkit and the RtMidi-Classes of Gary P. Scavone.\n\n") );
+    AboutText.append( tr("It uses the Qt5 toolkit and the RtMidi-Classes of Gary P. Scavone.\n\n") );
     AboutText.append( tr("%1 has been released under terms and conditions of the GNU general public license version 2.\n").arg( APPNAME ) );
     AboutBox->setText( AboutText );
     AboutBox->show();

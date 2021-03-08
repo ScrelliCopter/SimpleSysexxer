@@ -178,7 +178,7 @@
     </message>
     <message>
         <location filename="../../src/MyMainWindow.cpp" line="343"/>
-        <source>It uses the Famous QT4 toolkit and the RtMidi-Classes of Gary P. Scavone.
+        <source>It uses the Qt5 toolkit and the RtMidi-Classes of Gary P. Scavone.
 
 </source>
         <translation type="unfinished"></translation>

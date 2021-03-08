@@ -153,10 +153,10 @@
         <translation>est (c) </translation>
     </message>
     <message>
-        <source>It uses the Famous QT4 toolkit and the RtMidi-Classes of Gary P. Scavone.
+        <source>It uses the Qt5 toolkit and the RtMidi-Classes of Gary P. Scavone.
 
 </source>
-        <translation>Il utilise le Fameux toolkit QT4 et les Classes RtMidi de Gary P. Scavone.
+        <translation>Il utilise le Fameux toolkit Qt5 et les Classes RtMidi de Gary P. Scavone.
 
 </translation>
     </message>

@@ -1,7 +1,7 @@
 Copyright (C) 2009 by Christoph Eckert
 ce@christeck.de
 
-This file is part of Simple Sysexxer, a Qt4 tool to exchange data with MIDI devices.
+This file is part of Simple Sysexxer, a Qt5 tool to exchange data with MIDI devices.
 
     Simple Sysexxer is free software; you can redistribute it and/or modify
     it under the terms of the GNU General Public License as published by

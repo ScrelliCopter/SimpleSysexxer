@@ -230,10 +230,10 @@
     </message>
     <message>
         <location filename="../../src/MyMainWindow.cpp" line="343"/>
-        <source>It uses the Famous QT4 toolkit and the RtMidi-Classes of Gary P. Scavone.
+        <source>It uses the QT5 toolkit and the RtMidi-Classes of Gary P. Scavone.
 
 </source>
-        <translation>Dieses Programm nutzt die hervorragende Qt4-Klassenbibliothek und RtMidi von Gary P. Scavone.
+        <translation>Dieses Programm nutzt die hervorragende Qt5-Klassenbibliothek und RtMidi von Gary P. Scavone.
 
 </translation>
     </message>
