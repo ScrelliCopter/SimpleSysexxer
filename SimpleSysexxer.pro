@@ -13,7 +13,7 @@ CONFIG += qt release
 
 
 # Input
-FORMS += ui/MainWindow.ui
+FORMS += src/MainWindow.ui
 HEADERS += src/MyMainWindow.h src/MidiIn.h src/MidiOut.h
 SOURCES += src/main.cpp src/MyMainWindow.cpp src/MidiIn.cpp src/MidiOut.cpp
 OBJECTS_DIR = obj

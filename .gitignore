@@ -21,3 +21,5 @@ bin/simplesysexxer
 *.zip
 *.7z
 
+.idea/
+cmake-build-*/
