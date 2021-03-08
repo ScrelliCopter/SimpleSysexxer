@@ -28,8 +28,6 @@
 #include <QThread>
 #include <QtCore>
 
-using namespace std;
-
 class MidiIn : public QThread
   {
     // No signal and slot connections without this macro:

@@ -41,8 +41,6 @@
 
 #include "Versioning.h"
 
-using namespace std;
-
 class MyMainWindow: public QMainWindow, private Ui::MainWindow
   {
     Q_OBJECT
@@ -60,14 +58,14 @@ class MyMainWindow: public QMainWindow, private Ui::MainWindow
       void setupConnections();
       void setupControls();
       void initGuiData();
-      void prepareGuiData( vector<unsigned char> * );
+      void prepareGuiData( std::vector<unsigned char> * );
       void displayGuiData();
       void createDatabase();
 
       bool confirmDataLoss();
 
-      void trimMidiEvent( vector<unsigned char> * );
-      void appendEvent( vector<unsigned char> * );
+      void trimMidiEvent( std::vector<unsigned char> * );
+      void appendEvent( std::vector<unsigned char> * );
 
       QMenu * MenuFile;
       QMenu * MenuHelp;
@@ -102,7 +100,7 @@ class MyMainWindow: public QMainWindow, private Ui::MainWindow
       MidiIn * midiIn;
 
       // About vector usage see http://www.cppreference.com/cppvector/
-      QList<vector<unsigned char>*> eventList;
+      QList<std::vector<unsigned char>*> eventList;
 
       enum MidiStatus { idle, receiving, transmitting };
       MidiStatus midiStatus;

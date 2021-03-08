@@ -132,30 +132,30 @@ void MyMainWindow::loadFile( QString filepath )
           }
       }
 
-    vector<unsigned char> * buffer = new vector<unsigned char>;
+    auto buffer = new std::vector<unsigned char>;
     bool insideSysex = false;
-    for( int i = 0; i < inbytes.size(); i++ )
+    for ( char inbyte : inbytes )
       {
         // Sysex data starts with an 0xF0 byte (which is -16 in an signed char), and ends with an terminating 0xF7 (which is -9).
         // In case an 0xF0 occurs before a terminating 0xF7, cancel file loading.
         // This will probably exclude some users with some rare (Casio?) synths, but I have no test files so there's no alternative.
         // See http://www.somascape.org/midi/tech/mfile.html#sysex for details.
-        if ( inbytes.at( i ) == -16 && insideSysex == true )
+        if ( inbyte == -16 && insideSysex == true )
           {
             emit errorMessage( tr( "A System Exclusive start byte occured within a SysEx event." ), tr( "All data has been discarded. Either the file is damaged or neither a SysEx nor a MIDI file." ) );
             discardData();
             return;
           }
 
-        if ( inbytes.at( i ) == -16 )
+        if ( inbyte == -16 )
           {
             insideSysex = true;
           }
         if ( insideSysex == true )
           {
-            buffer->push_back( inbytes.at( i ) );
+            buffer->push_back( inbyte );
           }
-        if ( inbytes.at( i ) == -9 )
+        if ( inbyte == -9 )
           {
             insideSysex = false;
           }
@@ -168,7 +168,7 @@ void MyMainWindow::loadFile( QString filepath )
                 trimMidiEvent( buffer );
               }
             appendEvent( buffer );
-            buffer = new vector<unsigned char>;
+            buffer = new std::vector<unsigned char>;
           }
       }
     emit statusMessage( tr( "File was loaded" ), 5000 );
@@ -176,7 +176,7 @@ void MyMainWindow::loadFile( QString filepath )
   }
 
 
-void MyMainWindow::trimMidiEvent( vector<unsigned char> * buffer )
+void MyMainWindow::trimMidiEvent( std::vector<unsigned char> * buffer )
   {
     // About the variable length byte of SysEx events in MIDI files, see
     // http://www.somascape.org/midi/tech/mfile.html#sysex (also detailed info about sysex splitting) and
@@ -201,7 +201,7 @@ void MyMainWindow::trimMidiEvent( vector<unsigned char> * buffer )
   }
 
 
-void MyMainWindow::appendEvent( vector<unsigned char> * buffer )
+void MyMainWindow::appendEvent( std::vector<unsigned char> * buffer )
   {
     eventList.append( buffer );
     prepareGuiData( buffer );
@@ -244,11 +244,11 @@ void MyMainWindow::writeFile( QString filepath )
     if ( !fileHandle.open( QIODevice::WriteOnly | QIODevice::Truncate ) )
       emit errorMessage( tr( "It was not possible to open the specified file." ), tr( "Please check wether the chosen medium or the file is write protected." ) );
 
-    for ( int i = 0; i < eventList.size(); i++ )
+    for ( auto i : eventList )
       {
-        for ( unsigned int j = 0; j < eventList.at( i )->size(); j++ )
+        for ( unsigned char j : *i )
           {
-            fileHandle.putChar( eventList.at( i )->at( j ) );
+            fileHandle.putChar( (char)j );
           }
       }
 
@@ -265,10 +265,10 @@ void MyMainWindow::chunkArrived()
 
 void MyMainWindow::eventArrived( QByteArray eventBytes )
   {
-    vector<unsigned char> * buffer = new vector<unsigned char>;
-    for ( int i = 0; i < eventBytes.size(); i++ )
+    auto buffer = new std::vector<unsigned char>;
+    for ( char eventByte : eventBytes )
       {
-        buffer->push_back( eventBytes.at( i ) );
+        buffer->push_back( eventByte );
       }
     appendEvent( buffer );
     emit statusMessage( "", 2000 );
@@ -302,7 +302,7 @@ void MyMainWindow::cancelTransmission()
 
 bool MyMainWindow::confirmDataLoss()
   {
-    if ( eventList.size() == 0 )
+    if ( eventList.empty() )
       return true;
     QMessageBox messageBox;
     messageBox.setText( tr( "This will discard all currently loaded data." ) );
@@ -379,7 +379,7 @@ void MyMainWindow::setupConnections()
 
 void MyMainWindow::setupControls()
   {
-    if ( midiStatus == idle && eventList.size() == 0 )
+    if ( midiStatus == idle && eventList.empty() )
       {
         ActionFileReceive->setEnabled(true);
         ActionFileTransmit->setEnabled(false);
@@ -394,7 +394,7 @@ void MyMainWindow::setupControls()
         progressBar->setValue( 0 );
         progressBar->reset();
       }
-    else if ( midiStatus == idle && eventList.size() > 0 )
+    else if ( midiStatus == idle && !eventList.empty() )
       {
         ActionFileReceive->setEnabled(true);
         ActionFileTransmit->setEnabled(true);
@@ -448,7 +448,7 @@ void MyMainWindow::initGuiData()
   }
 
 
-void MyMainWindow::prepareGuiData(  vector<unsigned char> * buffer )
+void MyMainWindow::prepareGuiData( std::vector<unsigned char> * buffer )
   {
     signed int modelByte = 0;
     signed int deviceByte = 0;
@@ -666,7 +666,7 @@ void MyMainWindow::dropEvent( QDropEvent* DropEvent )
     QString filePath = urls.first().toLocalFile();
     if ( filePath.isEmpty() )
       return;
-    if ( confirmDataLoss() == false )
+    if ( !confirmDataLoss() )
       return;
 
     discardData();

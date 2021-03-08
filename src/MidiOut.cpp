@@ -71,43 +71,43 @@ void MidiOut::run()
   }
 
 
-void MidiOut::send( vector<unsigned char>* data )
+void MidiOut::send( std::vector<unsigned char>* data )
   {
-      snd_seq_event_t event;
-      snd_seq_ev_clear(&event);
-      snd_seq_ev_set_source(&event, portNumber);
-      snd_seq_ev_set_subs(&event);
-      snd_seq_ev_set_direct(&event);
+    snd_seq_event_t event;
+    snd_seq_ev_clear(&event);
+    snd_seq_ev_set_source(&event, portNumber);
+    snd_seq_ev_set_subs(&event);
+    snd_seq_ev_set_direct(&event);
 
-      // Also see
-      // http://www.mail-archive.com/mixxx-devel@lists.sourceforge.net/msg01503.html
-      // http://doxygen.scummvm.org/de/d2a/alsa_8cpp-source.html
-      // In case of SysEx data, ALSA takes a data pointer (even an array) and the data size.
-      // ALSA's buffer is limited to 16356 bytes anyway.
+    // Also see
+    // http://www.mail-archive.com/mixxx-devel@lists.sourceforge.net/msg01503.html
+    // http://doxygen.scummvm.org/de/d2a/alsa_8cpp-source.html
+    // In case of SysEx data, ALSA takes a data pointer (even an array) and the data size.
+    // ALSA's buffer is limited to 16356 bytes anyway.
 
-      vector<unsigned char> chunk;
-      for ( unsigned int i = 0; i < data->size(); i++ )
-        {
-          chunk.push_back( data->at(i) );
-          if ( chunk.size() == CHUNKMAXSIZE || chunk.back() == 0xF7 )
-            {
-              chunkCount ++;
-              snd_seq_ev_set_sysex(&event, chunk.size(), &chunk.front());
-              if( snd_seq_event_output_direct(sequencerHandle, &event) < 0 )
-                {
-                  emit errorMessage( tr("Event %1 was not sent successfully.").arg( eventCount, 10 ), tr("Please send the file used to the author for analysis.") );
-                  // TODO: I'm not sure if the next line is thread save - see MidiOut::stop() which gets invoked by the GUI thread
-                  sendMidi = false;
-                  return;
-                }
-              emit eventSent( chunkCount, chunkAmount );
-              // The baud rate of MIDI is 31250 bits/s = 32 microseconds per bit.
-              // Per byte, an additional start and one or two stop bits are used.
-              // The following delay should avoid data loss in case more data gets sent as fits into the ALSA buffers.
-              usleep( chunk.size() * 352 );
-              chunk.clear();
-            }
-        }
+    std::vector<unsigned char> chunk;
+    for ( unsigned int i = 0; i < data->size(); i++ )
+      {
+        chunk.push_back( data->at(i) );
+        if ( chunk.size() == CHUNKMAXSIZE || chunk.back() == 0xF7 )
+          {
+            chunkCount ++;
+            snd_seq_ev_set_sysex(&event, chunk.size(), &chunk.front());
+            if( snd_seq_event_output_direct(sequencerHandle, &event) < 0 )
+              {
+                emit errorMessage( tr("Event %1 was not sent successfully.").arg( eventCount, 10 ), tr("Please send the file used to the author for analysis.") );
+                // TODO: I'm not sure if the next line is thread save - see MidiOut::stop() which gets invoked by the GUI thread
+                sendMidi = false;
+                return;
+              }
+            emit eventSent( chunkCount, chunkAmount );
+            // The baud rate of MIDI is 31250 bits/s = 32 microseconds per bit.
+            // Per byte, an additional start and one or two stop bits are used.
+            // The following delay should avoid data loss in case more data gets sent as fits into the ALSA buffers.
+            usleep( chunk.size() * 352 );
+            chunk.clear();
+          }
+      }
   }
 
 
@@ -145,7 +145,7 @@ void MidiOut::init()
   }
 
 
-void MidiOut::setEventList( QList<vector<unsigned char>*> events )
+void MidiOut::setEventList( QList<std::vector<unsigned char>*> events )
   {
     eventList = events;
   }

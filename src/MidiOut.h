@@ -31,8 +31,6 @@
 
 # define CHUNKMAXSIZE 256
 
-using namespace std;
-
 class MidiOut : public QThread
   {
     // No signal and slot connections without this macro:
@@ -44,7 +42,7 @@ class MidiOut : public QThread
       unsigned int eventCount;
       unsigned int chunkAmount;
       unsigned int chunkCount;
-      QList<vector<unsigned char>*> eventList;
+      QList<std::vector<unsigned char>*> eventList;
       bool sendMidi;
       void determineChunkAmount();
 
@@ -55,9 +53,9 @@ class MidiOut : public QThread
     public slots:
       void init();
       void run();
-      void send( vector<unsigned char>* );
+      void send( std::vector<unsigned char>* );
       void stop();
-      void setEventList( QList<vector<unsigned char>*> );
+      void setEventList( QList<std::vector<unsigned char>*> );
     
     signals:
       void eventSent( int, int );
