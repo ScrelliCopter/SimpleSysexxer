@@ -20,6 +20,7 @@
 
 #include "MidiIn.h"
 
+
 MidiIn::MidiIn()
   {
     init();
@@ -114,5 +115,3 @@ void MidiIn::stopReception()
   {
     recordMidi = false;
   }
-
-

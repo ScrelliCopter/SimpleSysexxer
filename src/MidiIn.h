@@ -59,5 +59,3 @@ class MidiIn : public QThread
   };
 
 #endif
-
-

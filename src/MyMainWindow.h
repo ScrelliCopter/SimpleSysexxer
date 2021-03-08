@@ -134,4 +134,3 @@ class MyMainWindow: public QMainWindow, private Ui::MainWindow
   };
 
 #endif
-

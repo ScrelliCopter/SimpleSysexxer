@@ -91,7 +91,7 @@ void MidiOut::send( vector<unsigned char>* data )
           chunk.push_back( data->at(i) );
           if ( chunk.size() == CHUNKMAXSIZE || chunk.back() == 0xF7 )
             {
-	      chunkCount ++;
+              chunkCount ++;
               snd_seq_ev_set_sysex(&event, chunk.size(), &chunk.front());
               if( snd_seq_event_output_direct(sequencerHandle, &event) < 0 )
                 {
@@ -102,7 +102,7 @@ void MidiOut::send( vector<unsigned char>* data )
                 }
               emit eventSent( chunkCount, chunkAmount );
               // The baud rate of MIDI is 31250 bits/s = 32 microseconds per bit.
-	      // Per byte, an additional start and one or two stop bits are used.
+              // Per byte, an additional start and one or two stop bits are used.
               // The following delay should avoid data loss in case more data gets sent as fits into the ALSA buffers.
               usleep( chunk.size() * 352 );
               chunk.clear();
@@ -149,4 +149,3 @@ void MidiOut::setEventList( QList<vector<unsigned char>*> events )
   {
     eventList = events;
   }
-

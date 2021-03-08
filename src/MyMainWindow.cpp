@@ -95,18 +95,6 @@ void MyMainWindow::prepareTransmitFile()
         emit errorMessage( tr( "There was an attempt to send data while the internal status was not idle." ), tr( "Please restart the application and tell the author how to reproduce the problem." ) );
         return;
       }
-
-    /*
-    Commented, as sending huge files seems to work very well.
-    for ( signed int i = 0; i < eventList.size(); i++ )
-      {
-        if ( eventList.at( i )->size() > 16355 )
-        {
-          emit errorMessage( tr( "The data contains huge SysEx events." ), tr( "Please check carefully if the device received the data. If not, send the file to the author for analysis." ) );
-          break;
-        }
-      }
-    */
     transmitFile();
   }
 
