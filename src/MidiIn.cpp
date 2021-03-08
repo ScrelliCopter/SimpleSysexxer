@@ -72,7 +72,13 @@ void MidiIn::processInput()
   {
     do
       {
-        snd_seq_event_input( sequencerHandle, &sequencerEvent );
+        //TODO: investigate if this is even remotely correct
+        int bytes = snd_seq_event_input( sequencerHandle, &sequencerEvent );
+        if ( bytes < 0 || !sequencerEvent )
+          {
+            fprintf(stderr, "snd_seq_event_input(%p): %d\n", (void*)sequencerHandle, bytes);
+            continue;
+          }
         if ( sequencerEvent->type != SND_SEQ_EVENT_SYSEX )
           {
             snd_seq_free_event( sequencerEvent );
