@@ -40,11 +40,11 @@ private:
 
 public:
 	MidiIn();
-	~MidiIn();
+	~MidiIn() override = default;
+	[[noreturn]] void run() override;
 
 public slots:
 	void init();
-	void run();
 	void processInput();
 	void startReception();
 	void stopReception();

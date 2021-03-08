@@ -22,96 +22,86 @@
 
 
 MidiIn::MidiIn()
-  {
-    init();
-  }
-
-
-MidiIn::~MidiIn()
-  {
-
-  }
-
+{
+	init();
+}
 
 void MidiIn::init()
-  {
-    sequencerHandle = 0L;
-    sequencerEvent = 0L;
-    if ( snd_seq_open( &sequencerHandle, "default", SND_SEQ_OPEN_INPUT, 0 ) < 0 )
-      {
-        emit errorMessage ( tr( "Cannot initialize the MIDI subsystem."), tr( "Please ensure ALSA is accessible." ) );
-      }
+{
+	sequencerHandle = nullptr;
+	sequencerEvent = nullptr;
+	if (snd_seq_open(&sequencerHandle, "default", SND_SEQ_OPEN_INPUT, 0) < 0)
+		emit errorMessage(tr("Cannot initialize the MIDI subsystem."), tr("Please ensure ALSA is accessible."));
 
-    snd_seq_set_client_name(sequencerHandle, APPNAME );
-    
-    if ( snd_seq_create_simple_port( sequencerHandle, APPNAME, SND_SEQ_PORT_CAP_WRITE|SND_SEQ_PORT_CAP_SUBS_WRITE, SND_SEQ_PORT_TYPE_APPLICATION) < 0 )
-      {
-        emit errorMessage ( tr( "Cannot create MIDI port."), tr( "Please ensure ALSA is set up properly." ) );
-      }    
-  }
+	snd_seq_set_client_name(sequencerHandle, APPNAME);
+
+	if (snd_seq_create_simple_port(sequencerHandle, APPNAME,
+		SND_SEQ_PORT_CAP_WRITE | SND_SEQ_PORT_CAP_SUBS_WRITE, SND_SEQ_PORT_TYPE_APPLICATION) < 0)
+	{
+		emit errorMessage(tr("Cannot create MIDI port."), tr("Please ensure ALSA is set up properly."));
+	}
+}
 
 
-void MidiIn::run()
-  {
-    recordMidi = false;
-    int npfd = snd_seq_poll_descriptors_count(sequencerHandle, POLLIN);
-    struct pollfd* pfd = (struct pollfd *)alloca(npfd * sizeof(struct pollfd));
-    snd_seq_poll_descriptors(sequencerHandle, pfd, npfd, POLLIN);
-    while ( true )
-      {
-        // Avoid too much CPU load. According to the MIDI baud rate, 4 bytes need at least 1024 microseconds to pass the chord.
-        usleep( 512 );
-        if ( poll( pfd, npfd, 100000) > 0 && recordMidi == true )
-          {
-            processInput();
-          }
-      }
-  }
+[[noreturn]] void MidiIn::run()
+{
+	recordMidi = false;
+	int npfd = snd_seq_poll_descriptors_count(sequencerHandle, POLLIN);
+	auto pfd = (struct pollfd*)alloca(npfd * sizeof(struct pollfd));
+	snd_seq_poll_descriptors(sequencerHandle, pfd, npfd, POLLIN);
+	while (true)
+	{
+		// Avoid too much CPU load. According to the MIDI baud rate,
+		// 4 bytes need at least 1024 microseconds to pass the chord.
+		usleep(512);
+		if (poll(pfd, npfd, 100000) > 0 && recordMidi)
+			processInput();
+	}
+}
 
 
 void MidiIn::processInput()
-  {
-    do
-      {
-        //TODO: investigate if this is even remotely correct
-        int bytes = snd_seq_event_input( sequencerHandle, &sequencerEvent );
-        if ( bytes < 0 || !sequencerEvent )
-          {
-            fprintf(stderr, "snd_seq_event_input(%p): %d\n", (void*)sequencerHandle, bytes);
-            continue;
-          }
-        if ( sequencerEvent->type != SND_SEQ_EVENT_SYSEX )
-          {
-            snd_seq_free_event( sequencerEvent );
-            continue;
-          }
-        // Stolen from aseqmm/alsaevent.cpp by Pedro Lopez-Cabanillas
-        tempBuffer.append( QByteArray( (char *) sequencerEvent->data.ext.ptr, sequencerEvent->data.ext.len ) );
+{
+	do
+	{
+		//TODO: investigate if this is even remotely correct
+		int bytes = snd_seq_event_input(sequencerHandle, &sequencerEvent);
+		if (bytes < 0 || !sequencerEvent)
+		{
+			fprintf(stderr, "snd_seq_event_input(%p): %d\n", (void*)sequencerHandle, bytes);
+			continue;
+		}
+		if (sequencerEvent->type != SND_SEQ_EVENT_SYSEX)
+		{
+			snd_seq_free_event(sequencerEvent);
+			continue;
+		}
+		// Stolen from aseqmm/alsaevent.cpp by Pedro Lopez-Cabanillas
+		tempBuffer.append(QByteArray((char*)sequencerEvent->data.ext.ptr, sequencerEvent->data.ext.len));
 
-        // ALSA splits sysex messages into chunks, currently of 256 max bytes in size
-        // Therefore the data needs collection before sending it to the master thread
-        if ( tempBuffer.startsWith( 0xF0 ) && tempBuffer.endsWith( 0xF7 ) )
-          {
-            emit eventArrived( tempBuffer );
-            tempBuffer.clear();
-          }
-        else
-          {
-            emit chunkArrived();
-          }
-        snd_seq_free_event( sequencerEvent );
-      }
-    while ( snd_seq_event_input_pending( sequencerHandle, 0 ) > 0 );
-  }
+		// ALSA splits sysex messages into chunks, currently of 256 max bytes in size
+		// Therefore the data needs collection before sending it to the master thread
+		if (tempBuffer.startsWith(0xF0) && tempBuffer.endsWith(0xF7))
+		{
+			emit eventArrived(tempBuffer);
+			tempBuffer.clear();
+		}
+		else
+		{
+			emit chunkArrived();
+		}
+		snd_seq_free_event(sequencerEvent);
+	}
+	while (snd_seq_event_input_pending(sequencerHandle, 0) > 0);
+}
 
 
 void MidiIn::startReception()
-  {
-    recordMidi = true;
-  }
-
+{
+	recordMidi = true;
+}
 
 void MidiIn::stopReception()
-  {
-    recordMidi = false;
-  }
+{
+	recordMidi = false;
+}
