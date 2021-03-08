@@ -675,91 +675,41 @@ void MyMainWindow::dropEvent( QDropEvent* DropEvent )
 
 
 void MyMainWindow::setupMenus()
-  {
-    MenuFile = menuBar()->addMenu(tr("&File"));
-    MenuHelp = menuBar()->addMenu(tr("&Help"));
+{
+	connect(ActionFileOpen, SIGNAL(triggered()), this, SLOT(prepareOpenFile()));
+	connect(ActionFileDiscard, SIGNAL(triggered()), this, SLOT(prepareDiscardData()));
+	connect(ActionFileSaveas, SIGNAL(triggered()), this, SLOT(prepareSaveFile()));
+	connect(ActionFileReceive, SIGNAL(triggered()), this, SLOT(prepareReceiveFile()));
+	connect(ActionFileCancelTransmission, SIGNAL(triggered()), this, SLOT(cancelTransmission()));
+	connect(ActionFileTransmit, SIGNAL(triggered()), this, SLOT(prepareTransmitFile()));
+	connect(ActionFileQuit, SIGNAL(triggered()), this, SLOT(close()));
+	connect(ActionHelpAbout, SIGNAL(triggered()), this, SLOT(displayAboutBox()));
 
-    ActionFileOpen = new QAction(QIcon(":/icons/FileOpen.png"), tr("&Open..."), this);
-    ActionFileOpen->setShortcut(tr("Ctrl+O"));
-    ActionFileOpen->setStatusTip(tr("Open file from storage medium"));
-    ActionFileOpen->setWhatsThis( tr("Open a file. All currently loaded data will be discarded") );
-    ActionFileOpen->setEnabled(true);
-    connect(ActionFileOpen, SIGNAL(triggered()), this, SLOT(prepareOpenFile()));
+	ActionHelpWhatsThis = QWhatsThis::createAction(this);
 
-    ActionFileDiscard = new QAction(QIcon(":/icons/FileClear.png"), tr("&Discard..."), this);
-    ActionFileDiscard->setShortcut(tr("Ctrl+D"));
-    ActionFileDiscard->setStatusTip(tr("Discard all currently loaded data"));
-    ActionFileDiscard->setWhatsThis( tr("Discard all currently loaded data") );
-    ActionFileDiscard->setEnabled(true);
-    connect(ActionFileDiscard, SIGNAL(triggered()), this, SLOT(prepareDiscardData()));
+	MenuFile->addAction(ActionFileOpen);
+	MenuFile->addAction(ActionFileSaveas);
+	MenuFile->addSeparator();
+	MenuFile->addAction(ActionFileReceive);
+	MenuFile->addAction(ActionFileCancelTransmission);
+	MenuFile->addAction(ActionFileTransmit);
+	MenuFile->addSeparator();
 
-    ActionFileSaveas = new QAction(QIcon(":/icons/FileSaveas.png"), tr("&Save as..."), this);
-    ActionFileSaveas->setShortcut(tr("Ctrl+S"));
-    ActionFileSaveas->setStatusTip(tr("Save file to storage medium"));
-    ActionFileSaveas->setWhatsThis( tr("Save file to storage medium") );
-    ActionFileSaveas->setEnabled(true);
-    connect(ActionFileSaveas, SIGNAL(triggered()), this, SLOT(prepareSaveFile()));
+	MenuFile->addSeparator();
+	MenuFile->addAction(ActionFileDiscard);
+	MenuFile->addAction(ActionFileQuit);
 
-    ActionFileReceive = new QAction(QIcon(":/icons/FileReceive.png"), tr("&Receive"), this);
-    ActionFileReceive->setShortcut(tr("Ctrl+R"));
-    ActionFileReceive->setStatusTip(tr("Receive data from MIDI device"));
-    ActionFileReceive->setWhatsThis( tr("Receive data from MIDI device") );
-    ActionFileReceive->setEnabled(true);
-    connect(ActionFileReceive, SIGNAL(triggered()), this, SLOT(prepareReceiveFile()));
+	MenuHelp->addAction(ActionHelpWhatsThis);
+	MenuHelp->addAction(ActionHelpAbout);
 
-    ActionFileCancelTransmission = new QAction(QIcon(":/icons/FileCancelTransmission.png"), tr("&Cancel Transmission"), this);
-    ActionFileCancelTransmission->setShortcut(tr("ESC"));
-    ActionFileCancelTransmission->setStatusTip(tr("Cancel data transmission"));
-    ActionFileCancelTransmission->setWhatsThis( tr("Cancel data transmission") );
-    ActionFileCancelTransmission->setEnabled(true);
-    connect(ActionFileCancelTransmission, SIGNAL(triggered()), this, SLOT(cancelTransmission()));
+	MainToolBar->addAction(ActionFileDiscard);
+	MainToolBar->addAction(ActionFileOpen);
+	MainToolBar->addAction(ActionFileSaveas);
+	MainToolBar->addSeparator();
+	MainToolBar->addAction(ActionFileReceive);
+	MainToolBar->addAction(ActionFileCancelTransmission);
+	MainToolBar->addAction(ActionFileTransmit);
 
-    ActionFileTransmit = new QAction(QIcon(":/icons/FileTransmit.png"), tr("&Transmit"), this);
-    ActionFileTransmit->setShortcut(tr("Ctrl+T"));
-    ActionFileTransmit->setStatusTip(tr("Send data to MIDI device"));
-    ActionFileTransmit->setWhatsThis( tr("Send data to MIDI device") );
-    ActionFileTransmit->setEnabled(true);
-    connect(ActionFileTransmit, SIGNAL(triggered()), this, SLOT(prepareTransmitFile()));
-
-    ActionFileQuit = new QAction(QIcon(":/icons/FileQuit.png"), tr("&Quit"), this);
-    ActionFileQuit->setShortcut(tr("Ctrl+Q"));
-    ActionFileQuit->setStatusTip(tr("Quit this application"));
-    ActionFileQuit->setWhatsThis( tr("Quits this application without further confirmation. All currently loaded data will be lost.") );
-    ActionFileQuit->setEnabled(true);
-    connect(ActionFileQuit, SIGNAL(triggered()), this, SLOT(close()));
-
-    ActionHelpAbout = new QAction(QIcon(":/icons/AppIcon.png"), tr("&About"), this);
-    ActionHelpAbout->setShortcut(tr("Ctrl+A"));
-    ActionHelpAbout->setStatusTip(tr("Display information about the application") );
-    ActionHelpAbout->setWhatsThis( tr("Display information about the application") );
-    ActionHelpAbout->setEnabled(true);
-    connect(ActionHelpAbout, SIGNAL(triggered() ), this, SLOT( displayAboutBox() ) );
-
-    ActionHelpWhatsThis = QWhatsThis::createAction( this );
-
-    MenuFile->addAction( ActionFileOpen );
-    MenuFile->addAction( ActionFileSaveas );
-    MenuFile->addSeparator();
-    MenuFile->addAction( ActionFileReceive );
-    MenuFile->addAction( ActionFileCancelTransmission );
-    MenuFile->addAction( ActionFileTransmit );
-    MenuFile->addSeparator();
-    
-    MenuFile->addSeparator();
-    MenuFile->addAction( ActionFileDiscard );
-    MenuFile->addAction( ActionFileQuit );
-
-    MenuHelp->addAction(ActionHelpWhatsThis);
-    MenuHelp->addAction(ActionHelpAbout);
-
-    MainToolBar->addAction( ActionFileDiscard );
-    MainToolBar->addAction( ActionFileOpen );
-    MainToolBar->addAction( ActionFileSaveas );
-    MainToolBar->addSeparator();
-    MainToolBar->addAction( ActionFileReceive );
-    MainToolBar->addAction( ActionFileCancelTransmission );
-    MainToolBar->addAction( ActionFileTransmit );
-
-    progressBar->setVisible( false );
-    statusBar()->showMessage( tr("Idle"), 10000 );
-  }
+	progressBar->setVisible(false);
+	statusBar()->showMessage(tr("Idle"), 10000);
+}

@@ -67,8 +67,6 @@ protected:
 	void trimMidiEvent(std::vector<unsigned char>*);
 	void appendEvent(std::vector<unsigned char>*);
 
-	QMenu* MenuFile;
-	QMenu* MenuHelp;
 	QMessageBox* AboutBox;
 
 	QString FilePath;
@@ -85,15 +83,7 @@ protected:
 	QString unknownDataString;
 	QString variousDataString;
 
-	QAction* ActionFileOpen;
-	QAction* ActionFileSaveas;
-	QAction* ActionFileReceive;
-	QAction* ActionFileCancelTransmission;
-	QAction* ActionFileTransmit;
-	QAction* ActionFileDiscard;
-	QAction* ActionFileQuit;
 	QAction* ActionHelpWhatsThis;
-	QAction* ActionHelpAbout;
 
 	MidiOut* midiOut;
 	MidiIn* midiIn;
