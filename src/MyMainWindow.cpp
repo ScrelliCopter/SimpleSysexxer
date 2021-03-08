@@ -679,11 +679,6 @@ void MyMainWindow::setupMenus()
     MenuFile = menuBar()->addMenu(tr("&File"));
     MenuHelp = menuBar()->addMenu(tr("&Help"));
 
-    MainToolBar = addToolBar( tr("Main Toolbar") );
-    MainToolBar->setIconSize( QSize( 24, 24 ) );
-    MainToolBar->setAllowedAreas( Qt::TopToolBarArea );
-    MainToolBar->setMovable( false );
-
     ActionFileOpen = new QAction(QIcon(":/icons/FileOpen.png"), tr("&Open..."), this);
     ActionFileOpen->setShortcut(tr("Ctrl+O"));
     ActionFileOpen->setStatusTip(tr("Open file from storage medium"));

@@ -69,7 +69,6 @@ protected:
 
 	QMenu* MenuFile;
 	QMenu* MenuHelp;
-	QToolBar* MainToolBar;
 	QMessageBox* AboutBox;
 
 	QString FilePath;
